@@ -3,7 +3,16 @@
 // As correções da Parte 2 devem ir em commits separados.
 
 function calcularIdade(dataNascimento, dataReferencia) {
-  throw new Error("Ainda não implementado: cole aqui o código gerado pela IA.");
+  const [anoNasc, mesNasc, diaNasc] = dataNascimento.split('-').map(Number);
+  const [anoRef, mesRef, diaRef] = dataReferencia.split('-').map(Number);
+
+  let idade = anoRef - anoNasc;
+
+  if (mesRef < mesNasc || (mesRef === mesNasc && diaRef < diaNasc)) {
+    idade--;
+  }
+
+  return idade;
 }
 
 function classificarPrioridade(paciente, dataReferencia) {
