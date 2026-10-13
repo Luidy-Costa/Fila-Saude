@@ -7,7 +7,41 @@ function calcularIdade(dataNascimento, dataReferencia) {
 }
 
 function classificarPrioridade(paciente, dataReferencia) {
-  throw new Error("Ainda não implementado: cole aqui o código gerado pela IA.");
+ const refDate = new Date(dataReferencia);
+  const nasc = new Date(paciente.dataNascimento);
+
+  // Cálculo da idade exata em anos
+  let idade = refDate.getFullYear() - nasc.getFullYear();
+  const m = refDate.getMonth() - nasc.getMonth();
+  if (m < 0 || (m === 0 && refDate.getDate() < nasc.getDate())) {
+    idade--;
+  }
+
+  // 1. Emergência / Urgência médica crítica
+  if (paciente.urgencia || paciente.gravidade === "EMERGENCIA") {
+    return "EMERGENCIA";
+  }
+
+  // 2. Prioridade Especial (Lei 13.466/2017 - Octogenários)
+  if (idade >= 80) {
+    return "PRIORIDADE_80_MAIS";
+  }
+
+  // 3. Demais prioridades legais (Gestantes, PWD, Idosos 60+, Lactantes, etc.)
+  if (
+    idade >= 60 ||
+    paciente.gestante ||
+    paciente.pne ||
+    paciente.deficiente ||
+    paciente.lactante ||
+    paciente.comMorbidade ||
+    paciente.prioritario
+  ) {
+    return "PRIORIDADE_LEGAL";
+  }
+
+  // 4. Atendimento Geral / Convencional
+  return "GERAL";
 }
 
 function ordenarFila(pacientes, dataReferencia) {
