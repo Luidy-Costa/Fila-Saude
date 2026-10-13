@@ -11,7 +11,57 @@ function classificarPrioridade(paciente, dataReferencia) {
 }
 
 function ordenarFila(pacientes, dataReferencia) {
-  throw new Error("Ainda não implementado: cole aqui o código gerado pela IA.");
+  const refDate = new Date(dataReferencia);
+
+  function calcularIdade(dataNascimento) {
+    const nasc = new Date(dataNascimento);
+    let idade = refDate.getFullYear() - nasc.getFullYear();
+    const m = refDate.getMonth() - nasc.getMonth();
+    if (m < 0 || (m === 0 && refDate.getDate() < nasc.getDate())) {
+      idade--;
+    }
+    return idade;
+  }
+
+  function obterNivelPrioridade(p) {
+    const idade = calcularIdade(p.dataNascimento);
+
+    if (p.urgencia || p.gravidade === "EMERGENCIA") return 1;
+    if (idade >= 80) return 2;
+    if (
+      idade >= 60 ||
+      p.gestante ||
+      p.pne ||
+      p.deficiente ||
+      p.lactante ||
+      p.comMorbidade ||
+      p.prioritario
+    ) {
+      return 3;
+    }
+    return 4;
+  }
+
+  return [...pacientes].sort((a, b) => {
+    const nivelA = obterNivelPrioridade(a);
+    const nivelB = obterNivelPrioridade(b);
+
+    if (nivelA !== nivelB) {
+      return nivelA - nivelB;
+    }
+
+    const idadeA = calcularIdade(a.dataNascimento);
+    const idadeB = calcularIdade(b.dataNascimento);
+
+    if (idadeA >= 80 && idadeB >= 80 && idadeA !== idadeB) {
+      return idadeB - idadeA;
+    }
+
+    const chegadaA = new Date(a.dataChegada || a.criadoEm || 0).getTime();
+    const chegadaB = new Date(b.dataChegada || b.criadoEm || 0).getTime();
+
+    return chegadaA - chegadaB;
+  });
 }
 
 function nomeParaPainel(nomeCompleto) {
