@@ -108,7 +108,20 @@ function ordenarFila(pacientes, dataReferencia) {
 }
 
 function nomeParaPainel(nomeCompleto) {
-  throw new Error("Ainda não implementado: cole aqui o código gerado pela IA.");
+  if (!nomeCompleto || typeof nomeCompleto !== "string") {
+    return "";
+  }
+
+  const partes = nomeCompleto.trim().split(/\s+/);
+
+  if (partes.length === 1) {
+    return partes[0];
+  }
+
+  const primeiroNome = partes[0];
+  const ultimoSobrenome = partes[partes.length - 1];
+
+  return `${primeiroNome} ${ultimoSobrenome}`;
 }
 
 module.exports = { calcularIdade, classificarPrioridade, ordenarFila, nomeParaPainel };
