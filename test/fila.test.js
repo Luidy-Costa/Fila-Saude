@@ -42,7 +42,30 @@ test("calcularIdade: 05 - bebê com menos de 1 ano de idade", () => {
   assert.equal(calcularIdade("2026-01-10", "2026-10-15"), 0);
 });
 // ===== Testes de classificarPrioridade (mínimo de 5) =====
+test("classificarPrioridade: 01 - urgência/emergência médica", () => {
+  const paciente = { dataNascimento: "1990-01-01", urgencia: true };
+  assert.equal(classificarPrioridade(paciente, "2026-10-15"), "EMERGENCIA");
+});
 
+test("classificarPrioridade: 02 - octogenário (80+ anos)", () => {
+  const paciente = { nome: "João", dataNascimento: "1944-05-10" };
+  assert.equal(classificarPrioridade(paciente, "2026-10-15"), "PRIORIDADE_80_MAIS");
+});
+
+test("classificarPrioridade: 03 - prioridade legal por idade (60 a 79 anos)", () => {
+  const paciente = { dataNascimento: "1960-05-10" };
+  assert.equal(classificarPrioridade(paciente, "2026-10-15"), "PRIORIDADE_LEGAL");
+});
+
+test("classificarPrioridade: 04 - prioridade legal por condição especial (gestante)", () => {
+  const paciente = { dataNascimento: "2000-01-01", gestante: true };
+  assert.equal(classificarPrioridade(paciente, "2026-10-15"), "PRIORIDADE_LEGAL");
+});
+
+test("classificarPrioridade: 05 - atendimento geral (sem prioridades)", () => {
+  const paciente = { dataNascimento: "2000-01-01" };
+  assert.equal(classificarPrioridade(paciente, "2026-10-15"), "GERAL");
+});
 // ===== Testes de ordenarFila (mínimo de 5) =====
 
 // ===== Testes de nomeParaPainel (mínimo de 5) =====
