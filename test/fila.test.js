@@ -120,6 +120,30 @@ test("ordenarFila: 05 - imutabilidade do array original de entrada", () => {
 
   assert.deepEqual(pacientes, copiaOriginal);
 });
-// ===== Testes de nomeParaPainel (mínimo de 5) =====
 
+
+// ===== Testes de nomeParaPainel (mínimo de 5) =====
+test("nomeParaPainel: 01 - primeiro e último nome", () => {
+  assert.equal(nomeParaPainel("Maria Silva Santos"), "Maria Santos");
+});
+
+test("nomeParaPainel: 02 - apenas um nome", () => {
+  assert.equal(nomeParaPainel("João"), "João");
+});
+
+test("nomeParaPainel: 03 - remoção de espaços extras nas pontas e no meio", () => {
+  assert.equal(
+    nomeParaPainel("   Carlos   Eduardo   Oliveira   "),
+    "Carlos Oliveira"
+  );
+});
+
+test("nomeParaPainel: 04 - string vazia", () => {
+  assert.equal(nomeParaPainel(""), "");
+});
+
+test("nomeParaPainel: 05 - valores nulos ou indefinidos", () => {
+  assert.equal(nomeParaPainel(null), "");
+  assert.equal(nomeParaPainel(undefined), "");
+});
 // Pense em: valores de fronteira, arredondamento, datas, combinações de regras e entradas inválidas.
