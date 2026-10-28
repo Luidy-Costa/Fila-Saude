@@ -67,7 +67,59 @@ test("classificarPrioridade: 05 - atendimento geral (sem prioridades)", () => {
   assert.equal(classificarPrioridade(paciente, "2026-10-15"), "GERAL");
 });
 // ===== Testes de ordenarFila (mínimo de 5) =====
+test("ordenarFila: 01 - ordenação por categorias de prioridade diferentes", () => {
+  const pacientes = [
+    { id: 1, dataNascimento: "2000-01-01", dataChegada: "2026-10-15T08:00:00Z" }, // Geral
+    { id: 2, dataNascimento: "1940-01-01", dataChegada: "2026-10-15T09:00:00Z" }, // 80+
+    { id: 3, dataNascimento: "2000-01-01", urgencia: true, dataChegada: "2026-10-15T10:00:00Z" }, // Emergência
+    { id: 4, dataNascimento: "1960-01-01", dataChegada: "2026-10-15T08:30:00Z" }, // Prioridade Legal
+  ];
 
+  const resultado = ordenarFila(pacientes, "2026-10-15");
+  assert.deepEqual(resultado.map((p) => p.id), [3, 2, 4, 1]);
+});
+
+test("ordenarFila: 02 - desempate na categoria 80+ pelo paciente mais velho", () => {
+  const pacientes = [
+    { id: 1, dataNascimento: "1945-01-01", dataChegada: "2026-10-15T08:00:00Z" }, // 81 anos
+    { id: 2, dataNascimento: "1935-01-01", dataChegada: "2026-10-15T09:00:00Z" }, // 91 anos
+  ];
+
+  const resultado = ordenarFila(pacientes, "2026-10-15");
+  assert.deepEqual(resultado.map((p) => p.id), [2, 1]);
+});
+
+test("ordenarFila: 03 - desempate no atendimento geral por ordem de chegada", () => {
+  const pacientes = [
+    { id: 1, dataNascimento: "2000-01-01", dataChegada: "2026-10-15T10:00:00Z" }, // Chegou depois
+    { id: 2, dataNascimento: "1995-01-01", dataChegada: "2026-10-15T08:00:00Z" }, // Chegou antes
+  ];
+
+  const resultado = ordenarFila(pacientes, "2026-10-15");
+  assert.deepEqual(resultado.map((p) => p.id), [2, 1]);
+});
+
+test("ordenarFila: 04 - suporte ao campo alternativo criadoEm para horário de chegada", () => {
+  const pacientes = [
+    { id: 1, dataNascimento: "2000-01-01", criadoEm: "2026-10-15T10:00:00Z" },
+    { id: 2, dataNascimento: "2000-01-01", criadoEm: "2026-10-15T07:30:00Z" },
+  ];
+
+  const resultado = ordenarFila(pacientes, "2026-10-15");
+  assert.deepEqual(resultado.map((p) => p.id), [2, 1]);
+});
+
+test("ordenarFila: 05 - imutabilidade do array original de entrada", () => {
+  const pacientes = [
+    { id: 1, dataNascimento: "2000-01-01" },
+    { id: 2, dataNascimento: "1940-01-01" },
+  ];
+  const copiaOriginal = [...pacientes];
+
+  ordenarFila(pacientes, "2026-10-15");
+
+  assert.deepEqual(pacientes, copiaOriginal);
+});
 // ===== Testes de nomeParaPainel (mínimo de 5) =====
 
 // Pense em: valores de fronteira, arredondamento, datas, combinações de regras e entradas inválidas.
