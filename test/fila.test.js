@@ -22,7 +22,25 @@ test("EX02: exemplo da especificação", () => {
 });
 
 // ===== Testes de calcularIdade (mínimo de 5) =====
+test("calcularIdade: 01 - idade simples (já fez aniversário no ano)", () => {
+  assert.equal(calcularIdade("1990-03-01", "2026-10-15"), 36);
+});
 
+test("calcularIdade: 02 - ainda não fez aniversário no ano", () => {
+  assert.equal(calcularIdade("1990-12-25", "2026-10-15"), 35);
+});
+
+test("calcularIdade: 03 - dia exato do aniversário", () => {
+  assert.equal(calcularIdade("1990-10-15", "2026-10-15"), 36);
+});
+
+test("calcularIdade: 04 - nascido em ano bissexto (29 de fevereiro)", () => {
+  assert.equal(calcularIdade("2000-02-29", "2026-02-28"), 25);
+});
+
+test("calcularIdade: 05 - bebê com menos de 1 ano de idade", () => {
+  assert.equal(calcularIdade("2026-01-10", "2026-10-15"), 0);
+});
 // ===== Testes de classificarPrioridade (mínimo de 5) =====
 
 // ===== Testes de ordenarFila (mínimo de 5) =====
